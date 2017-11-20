@@ -1,6 +1,9 @@
 ![](Assets/header.jpg)
 
 <p align="center">
+    <a href="https://travis-ci.org/Juanpe/SkeletonView">
+      <img src="https://img.shields.io/travis/Juanpe/SkeletonView.svg">
+    </a>
     <img src="https://img.shields.io/badge/Swift-4.0-orange.svg" />
     <a href="https://cocoapods.org/pods/SkeletonView">
         <img src="https://img.shields.io/cocoapods/v/SkeletonView.svg" alt="CocoaPods" />
@@ -8,14 +11,39 @@
     <a href="https://github.com/Carthage/Carthage">
         <img src="https://img.shields.io/badge/carthage-compatible-4BC51D.svg?style=flat" alt="Carthage" />
     </a>
-    <a href="https://twitter.com/juanpe_catalan">
-        <img src="https://img.shields.io/badge/contact-@juanpe_catalan-blue.svg?style=flat" alt="Twitter: @juanpe_catalan" />
+    <a href="https://twitter.com/JuanpeCatalan">
+        <img src="https://img.shields.io/badge/contact-@JuanpeCatalan-blue.svg?style=flat" alt="Twitter: @JuanpeCatalan" />
     </a>
     <a href="https://opensource.org/licenses/MIT">
-  <img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License" />
-</a>
+      <img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License" />
+    </a>
+    <a href="https://twitter.com/intent/tweet?text=Wow%20This%20library%20is%20awesome:&url=https%3A%2F%2Fgithub.com%2FJuanpe%2FSkeletonView">
+      <img src="https://img.shields.io/twitter/url/https/github.com/Juanpe/SkeletonView.svg?style=social" alt="License" />
+    </a>
 </p>
 
+Today almost all apps have async processes, such as Api requests, long running processes, etc. And while the processes are working, usually developers place a loading view to show users that something is going on.
+
+```SkeletonView``` has been conceived to address this need, an elegant way to show users that something is happening and also prepare them to which contents he is waiting.
+
+Enjoy it! 🙂
+
+* [Features](#-features)
+* [Requirements](#-supported-os--sdk-versions)
+* [Example Project](#-example)
+* [Installation](#-installation)
+  * [Cocoapods](#using-cocoapods)
+  * [Carthage](#using-carthage)
+* [How to use](#-how-to-use)
+  * [Collections](#-collections)
+  * [Multiline text](#-multiline-text)
+  * [Custom colors](#-custom-colors)
+  * [Custom animations](#-custom-animations)
+  * [Hierarchy](#-hierarchy)
+* [Documentation](#-documentation)
+* [Contributed](#-contributed)
+* [Author](#-author)
+* [License](#-license)
 
 
 ## 🌟 Features
@@ -31,17 +59,7 @@
 ### 📋 Supported OS & SDK Versions
 
 * iOS 9.0+
-* Swift 4
-
-### 🎤 Introduction
-
-Today almost all apps have async processes, such as Api requests, long running processes, etc. And while the processes are working, usually developers place a loading view to show users that something is going on.
-
-```SkeletonView``` has been conceived to address this need, an elegant way to show users that something is happening and also prepare them to which contents he is waiting.
-
-Enjoy it! 🙂
-
-###### Project generated with [SwiftPlate](https://github.com/JohnSundell/SwiftPlate)
+* Swift 4 (Swift 3 compatible)
 
 ### 🔮 Example
 
@@ -144,7 +162,7 @@ public protocol SkeletonTableViewDataSource: UITableViewDataSource {
     func collectionSkeletonView(_ skeletonView: UITableView, cellIdenfierForRowAt indexPath: IndexPath) -> ReusableCellIdentifier
 }
 ```
-As you can see, this protocol inherits from ```UITableViewDataSource``, so you can replace this protocol with the skeleton protocol.
+As you can see, this protocol inherits from ```UITableViewDataSource```, so you can replace this protocol with the skeleton protocol.
 
 This protocol has a default implementation:
 
@@ -185,7 +203,9 @@ You can decide which color the skeleton is tinted with. You only need to pass as
 
 **Using solid colors**
 ``` swift
-view.showSkeleton(usingColor: UIColor.midnightBlue) // Solid
+view.showSkeleton(usingColor: UIColor.gray) // Solid
+// or
+view.showSkeleton(usingColor: UIColor(red: 25.0, green: 30.0, blue: 255.0, alpha: 1.0))
 ```
 **Using gradients**
 ``` swift
@@ -193,7 +213,9 @@ let gradient = SkeletonGradient(baseColor: UIColor.midnightBlue)
 view.showGradientSkeleton(usingGradient: gradient) // Gradient
 ```
 
-```SkeletonView``` features 20 flat colors 🤙🏼:
+Besides, ```SkeletonView``` features 20 flat colors 🤙🏼
+
+```UIColor.turquoise, UIColor.greenSea, UIColor.sunFlower, UIColor.flatOrange  ...```
 
 ![](Assets/flatcolors.png)
 ###### Image captured from website [https://flatuicolors.com](https://flatuicolors.com)
@@ -221,6 +243,33 @@ view.showAnimatedSkeleton { (layer) -> CAAnimation in
   return animation
 }
 ```
+
+**NEW** It's available ```SkeletonAnimationBuilder```. It's a builder to make ```SkeletonLayerAnimation```.
+
+Today, you can create **sliding animations** for gradients, deciding the **direction** and setting the **duration** of the animation (default = 1.5s).
+
+```swift
+// func makeSlidingAnimation(withDirection direction: GradientDirection, duration: CFTimeInterval = 1.5) -> SkeletonLayerAnimation
+
+let animation = SkeletonAnimationBuilder().makeSlidingAnimation(withDirection: .leftToRight)
+view.showAnimatedGradientSkeleton(usingGradient: gradient, animation: animation)
+
+```
+
+```GradientDirection``` is an enum, with this cases:
+
+|  Direction | Preview
+|------- | -------
+| .leftRight | ![](Assets/sliding_left_to_right.gif)
+| .rightLeft | ![](Assets/sliding_right_to_left.gif)
+| .topBottom | ![](Assets/sliding_top_to_bottom.gif)  
+| .bottomTop | ![](Assets/sliding_bottom_to_top.gif)
+| .topLeftBottomRight | ![](Assets/sliding_topLeft_to_bottomRight.gif)
+| .bottomRightTopLeft | ![](Assets/sliding_bottomRight_to_topLeft.gif)
+
+> **😉 TRICK!**
+Exist another way to create sliding animations, just using this shortcut:
+>>```let animation = GradientDirection.leftToRight.slidingAnimation()```
 
 ### 👨‍👧‍👦 Hierarchy
 
@@ -250,9 +299,11 @@ This is an open source project, so feel free to contribute. How?
 
 See [all contributors](https://github.com/Juanpe/SkeletonView/graphs/contributors)
 
+###### Project generated with [SwiftPlate](https://github.com/JohnSundell/SwiftPlate)
+
 ## 👨🏻‍💻 Author
 [1.1]: http://i.imgur.com/tXSoThF.png
-[1]: http://www.twitter.com/juanpe_catalan
+[1]: http://www.twitter.com/JuanpeCatalan
 
 * Juanpe Catalán [![alt text][1.1]][1]
 
